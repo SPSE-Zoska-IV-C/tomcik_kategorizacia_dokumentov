@@ -1,0 +1,23 @@
+# Ignoruj virtuálne prostredie
+venv/
+ENV/
+env/
+
+# Ignoruj cache súbory
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignoruj veľké modely a dočasné súbory
+model/
+*.bin
+*.pt
+*.ckpt
+
+# Ignoruj logy a výstupy
+logs/
+*.log
+
+# Ignoruj systémové súbory
+.DS_Store
+Thumbs.db

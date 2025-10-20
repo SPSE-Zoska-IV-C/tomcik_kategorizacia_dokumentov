@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="centered-auth-bg">
+    <div class="centered-auth-container">
+        <div class="auth-card" style="max-width:700px;width:100%;">
+            <h1 class="main-title" style="font-size:1.5rem;">{{ title }}</h1>
+            {% if documents %}
+            <div style="overflow-x:auto;width:100%;margin-top:18px;">
+                <table style="width:100%;border-collapse:collapse;">
+                    <thead>
+                        <tr style="background:#f7f8fa;">
+                            <th style="padding:8px 6px;text-align:left;">Názov súboru</th>
+                            <th style="padding:8px 6px;text-align:left;">Dátum nahrania</th>
+                            <th style="padding:8px 6px;text-align:left;">Používateľ</th>
+                            <th style="padding:8px 6px;text-align:left;">Stiahnuť</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in documents %}
+                        <tr style="border-bottom:1px solid #eee;">
+                            <td style="padding:7px 6px;">{{ doc.filename }}</td>
+                            <td style="padding:7px 6px;">{{ doc.date }}</td>
+                            <td style="padding:7px 6px;">{{ doc.uploader }}</td>
+                            <td style="padding:7px 6px;"><a href="{{ doc.download_url }}" class="choose-files-btn" style="padding:4px 14px;font-size:0.98rem;">Stiahnuť</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <p style="text-align:center;margin-top:18px;">Žiadne dokumenty v tejto kategórii.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

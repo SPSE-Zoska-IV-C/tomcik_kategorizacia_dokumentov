@@ -1,0 +1,302 @@
+.auth-form select {
+    padding: 10px 12px;
+    border: 1px solid #d3d3e7;
+    border-radius: 7px;
+    font-size: 1rem;
+    background: #f7f8fa;
+    margin-bottom: 2px;
+}
+.auth-form select:focus {
+    outline: 2px solid #6c63ff;
+    border-color: #6c63ff;
+}
+
+/* Table styles for document lists */
+table {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    overflow: hidden;
+}
+th, td {
+    font-size: 1rem;
+}
+/* Centered Auth Card Styles */
+.centered-auth-bg {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f8fa;
+}
+.centered-auth-container {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.auth-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    padding: 40px 32px 28px 32px;
+    min-width: 320px;
+    max-width: 370px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.auth-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 10px;
+}
+.auth-form label {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 2px;
+}
+.auth-form input[type="text"],
+.auth-form input[type="password"] {
+    padding: 10px 12px;
+    border: 1px solid #d3d3e7;
+    border-radius: 7px;
+    font-size: 1rem;
+    background: #f7f8fa;
+    margin-bottom: 2px;
+}
+.auth-form input:focus {
+    outline: 2px solid #6c63ff;
+    border-color: #6c63ff;
+}
+.auth-link {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 1rem;
+}
+.auth-link a {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+.auth-link a:hover {
+    text-decoration: underline;
+}
+@media (max-width: 500px) {
+    .auth-card {
+        min-width: 0;
+        max-width: 98vw;
+        padding: 24px 6vw 18px 6vw;
+    }
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f7f8fa;
+    margin: 0;
+    padding: 0;
+}
+
+.main-dashboard-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 0 0 0;
+}
+
+.main-title {
+    text-align: center;
+    font-size: 2.6rem;
+    font-weight: 700;
+    margin-bottom: 0.2em;
+    color: #222;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2.5em;
+    font-size: 1.1rem;
+}
+
+.dashboard-cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 36px;
+        width: 100%;
+        box-sizing: border-box;
+}
+
+.dashboard-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        padding: 24px 36px;
+        flex: 1 1 180px;
+        max-width: 220px;
+        min-width: 150px;
+        text-align: center;
+        border: 2px solid #f2f2f2;
+        transition: border 0.2s;
+        margin: 0;
+}
+
+@media (max-width: 900px) {
+    .dashboard-cards {
+        gap: 16px;
+    }
+    .dashboard-card {
+        padding: 18px 10px;
+        max-width: 48%;
+        min-width: 120px;
+        font-size: 0.98rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-cards {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+    .dashboard-card {
+        max-width: 95vw;
+        width: 100%;
+        min-width: 0;
+        font-size: 0.95rem;
+    }
+}
+.dashboard-card.legal { border-color: #2962ff; }
+.dashboard-card.financial { border-color: #00c853; }
+.dashboard-card.articles { border-color: #7c4dff; }
+.dashboard-card.reports { border-color: #ff6d00; }
+
+.card-title {
+    display: block;
+    font-size: 1.05rem;
+    color: #444;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+.card-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #222;
+}
+
+.upload-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.upload-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 32px 32px 24px 32px;
+    min-width: 600px;
+    max-width: 700px;
+}
+
+.upload-card h2 {
+    margin-top: 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #222;
+}
+
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.upload-drop-area {
+    width: 100%;
+    min-height: 170px;
+    border: 2px dashed #d3d3e7;
+    border-radius: 12px;
+    background: #f7f8fa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    position: relative;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.upload-drop-area:hover {
+    border-color: #6c63ff;
+}
+.upload-folder-icon {
+    font-size: 3.2rem;
+    margin-bottom: 10px;
+}
+.upload-instructions {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+.upload-support {
+    font-size: 0.98rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+.choose-files-btn {
+    display: inline-block;
+    background: #6c63ff;
+    color: #fff;
+    padding: 8px 22px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 10px;
+    margin-top: 6px;
+    text-align: center;
+    transition: background 0.2s;
+}
+.choose-files-btn:hover {
+    background: #5548c8;
+}
+.upload-btn {
+    width: 100%;
+    background: #6c63ff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.upload-btn:hover {
+    background: #5548c8;
+}
+
+.logout-link {
+    text-align: center;
+    margin-top: 30px;
+}
+.logout-link a {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+.logout-link a:hover {
+    text-decoration: underline;
+}

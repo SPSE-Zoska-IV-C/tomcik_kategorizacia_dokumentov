@@ -1,11 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="sk">
 <head>
-    <title>Result</title>
+    <meta charset="UTF-8">
+    <title>Výsledok nahrávania</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Document: {{ filename }}</h1>
-    <p>Category: {{ category }}</p>
-    <a href="/">Upload another file</a>
+    <div class="main-dashboard-container">
+        <h1 class="main-title">Document Recognition & Organization</h1>
+        <p class="subtitle">Výsledok nahrávania</p>
+        <div class="upload-section">
+            <div class="upload-card">
+                <h2>Súbor bol úspešne nahratý!</h2>
+                <p style="text-align:center;">Nahraný súbor: <strong>{{ subor }}</strong></p>
+                <div style="text-align:center; margin-top:18px;">
+                    <a href="{{ url_for('nahrat_subor') }}" class="choose-files-btn">Nahrať ďalší súbor</a>
+                </div>
+                <div style="text-align:center; margin-top:10px;">
+                    <a href="{{ url_for('odhlasenie') }}" class="choose-files-btn" style="background:#ff6d00;">Odhlásiť sa</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

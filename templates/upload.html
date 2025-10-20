@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Recognition & Organization</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .dashboard-card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .dashboard-card:hover {
+            cursor: pointer;
+            transform: translateY(-3px);
+            transition: transform 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-dashboard-container">
+        <h1 class="main-title">Document Recognition & Organization</h1>
+        <p class="subtitle">Upload and organize your documents with automatic classification</p>
+        <div class="dashboard-cards">
+            <div class="dashboard-card">
+                <a href="{{ url_for('documents_total') }}">
+                    <span class="card-title">TOTAL DOCUMENTS</span>
+                    <span class="card-value">0</span>
+                </a>
+            </div>
+            <div class="dashboard-card legal">
+                <a href="{{ url_for('documents_category', category='pravne') }}">
+                    <span class="card-title">LEGAL</span>
+                    <span class="card-value">0</span>
+                </a>
+            </div>
+            <div class="dashboard-card financial">
+                <a href="{{ url_for('documents_category', category='financne') }}">
+                    <span class="card-title">FINANCIAL</span>
+                    <span class="card-value">0</span>
+                </a>
+            </div>
+            <div class="dashboard-card articles">
+                <a href="{{ url_for('documents_category', category='clanky') }}">
+                    <span class="card-title">ARTICLES</span>
+                    <span class="card-value">0</span>
+                </a>
+            </div>
+            <div class="dashboard-card reports">
+                <a href="{{ url_for('documents_category', category='spravy') }}">
+                    <span class="card-title">REPORTS</span>
+                    <span class="card-value">0</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-card">
+                <h2>Upload Documents</h2>
+                <form method="POST" enctype="multipart/form-data" class="upload-form">
+                    <div class="upload-drop-area">
+                        <div class="upload-folder-icon">📁</div>
+                        <div class="upload-instructions">Drop files here or click to upload</div>
+                        <div class="upload-support">Supports PDF and Word documents</div>
+                        <input type="file" id="subor" name="subor" required style="display:none;" multiple>
+                        <label for="subor" class="choose-files-btn">Choose Files</label>
+                    </div>
+                    <button type="submit" class="upload-btn">Upload Documents</button>
+                </form>
+            </div>
+        </div>
+        <p class="logout-link"><a href="{{ url_for('odhlasenie') }}">Odhlásiť sa</a></p>
+    </div>
+</body>
+</html>

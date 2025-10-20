@@ -1,13 +1,30 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="sk">
 <head>
-    <title>Document Classifier</title>
+    <meta charset="UTF-8">
+    <title>Document Recognition & Organization</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Upload document</h1>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" required>
-        <button type="submit">Upload</button>
-    </form>
+    <div class="main-dashboard-container">
+        <h1 class="main-title">Document Recognition & Organization</h1>
+        <p class="subtitle">Upload and organize your documents with automatic classification</p>
+        <div class="upload-section">
+            <div class="upload-card">
+                <h2>Upload Documents</h2>
+                <form action="/upload" method="post" enctype="multipart/form-data" class="upload-form">
+                    <div class="upload-drop-area">
+                        <div class="upload-folder-icon">📁</div>
+                        <div class="upload-instructions">Drop files here or click to upload</div>
+                        <div class="upload-support">Supports PDF and Word documents</div>
+                        <input type="file" id="file" name="file" required style="display:none;" multiple>
+                        <label for="file" class="choose-files-btn">Choose Files</label>
+                    </div>
+                    <button type="submit" class="upload-btn">Upload Documents</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

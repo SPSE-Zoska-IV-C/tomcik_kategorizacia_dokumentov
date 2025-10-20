@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <title>Prihlásenie</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="centered-auth-bg">
+    <div class="centered-auth-container">
+        <div class="auth-card">
+            <h1 class="main-title">Document Recognition & Organization</h1>
+            <p class="subtitle">Prihlásenie do systému</p>
+            <form method="POST" class="auth-form">
+                <label for="meno">Používateľské meno:</label>
+                <input type="text" id="meno" name="meno" required>
+                <label for="heslo">Heslo:</label>
+                <input type="password" id="heslo" name="heslo" required>
+                <button type="submit" class="upload-btn">Prihlásiť sa</button>
+            </form>
+            <p class="auth-link">Nemáš účet? <a href="{{ url_for('registracia') }}">Zaregistruj sa tu</a></p>
+        </div>
+    </div>
+</body>
+</html>
