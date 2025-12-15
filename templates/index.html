@@ -1,30 +1,90 @@
-
 <!DOCTYPE html>
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
-    <title>Document Recognition & Organization</title>
+    <title>Správa dokumentov</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
     <div class="main-dashboard-container">
-        <h1 class="main-title">Document Recognition & Organization</h1>
-        <p class="subtitle">Upload and organize your documents with automatic classification</p>
+        <h1 class="main-title">Správa dokumentov</h1>
+        <p class="subtitle">Nahraj, zobraz a spravuj svoje dokumenty</p>
+
+        <!-- Dashboard karty -->
+        <div class="dashboard-cards">
+
+            <a href="{{ url_for('documents_total') }}" class="dashboard-card total">
+                <span class="card-title">VŠETKY DOKUMENTY</span>
+                <span class="card-value">{{ total }}</span>
+            </a>
+
+            <a href="{{ url_for('documents_category', category='pravne') }}" class="dashboard-card">
+                <span class="card-title">PRÁVNE</span>
+                <span class="card-value">{{ counts['pravne'] }}</span>
+            </a>
+
+            <a href="{{ url_for('documents_category', category='financne') }}" class="dashboard-card">
+                <span class="card-title">FINANČNÉ</span>
+                <span class="card-value">{{ counts['financne'] }}</span>
+            </a>
+
+            <a href="{{ url_for('documents_category', category='clanky') }}" class="dashboard-card">
+                <span class="card-title">ČLÁNKY</span>
+                <span class="card-value">{{ counts['clanky'] }}</span>
+            </a>
+
+            <a href="{{ url_for('documents_category', category='spravy') }}" class="dashboard-card">
+                <span class="card-title">SPRÁVY</span>
+                <span class="card-value">{{ counts['spravy'] }}</span>
+            </a>
+
+        </div>
+
+        <!-- Upload sekcia -->
         <div class="upload-section">
             <div class="upload-card">
-                <h2>Upload Documents</h2>
+                <h2>Nahrať dokumenty</h2>
+
                 <form action="/upload" method="post" enctype="multipart/form-data" class="upload-form">
                     <div class="upload-drop-area">
                         <div class="upload-folder-icon">📁</div>
-                        <div class="upload-instructions">Drop files here or click to upload</div>
-                        <div class="upload-support">Supports PDF and Word documents</div>
-                        <input type="file" id="file" name="file" required style="display:none;" multiple>
-                        <label for="file" class="choose-files-btn">Choose Files</label>
+
+                        <div id="file-preview" class="upload-instructions">
+                            Presuň sem súbory alebo klikni na tlačidlo<br>
+                            <small>PDF / DOCX / TXT</small>
+                        </div>
+
+                        <input type="file" id="subor" name="subor" multiple hidden>
+                        <label for="subor" class="choose-files-btn">Vybrať súbory</label>
                     </div>
-                    <button type="submit" class="upload-btn">Upload Documents</button>
+
+                    <button type="submit" id="upload-btn" class="upload-btn" style="display:none;">
+                        Nahrať dokumenty
+                    </button>
                 </form>
             </div>
         </div>
+
+        <p class="logout-link">
+            <a href="{{ url_for('odhlasenie') }}">Odhlásiť sa</a>
+        </p>
     </div>
+
+<script>
+let selectedFiles = [];
+const input = document.getElementById("subor");
+const preview = document.getElementById("file-preview");
+const uploadBtn = document.getElementById("upload-btn");
+
+input.addEventListener("change", () => {
+    selectedFiles = Array.from(input.files);
+    let list = "<strong>Vybrané súbory:</strong><br><br>";
+    selectedFiles.forEach(f => list += "📄 " + f.name + "<br>");
+    preview.innerHTML = list;
+    uploadBtn.style.display = "block";
+});
+</script>
+
 </body>
 </html>

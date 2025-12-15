@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <title>Rozpoznávanie a organizácia dokumentov</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/337/337946.png" type="image/png">
+
+    <style>
+        body {
+            background-color: #1e1f29;
+            color: #fff;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .container {
+            width: 75%;
+            margin: 80px auto;
+            background: #2b2e3b;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            text-align: center;
+            color: #c7c7c7;
+            margin-bottom: 25px;
+        }
+
+        .document-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #3a3c4a;
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.05);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .document-item:hover {
+            transform: translateY(-3px);
+            background: #44475a;
+        }
+
+        .document-item strong {
+            flex: 1;
+            color: #fff;
+            font-weight: 500;
+            overflow-wrap: anywhere;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .action-buttons a,
+        .action-buttons button {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .open-btn {
+            background-color: #4da3ff;
+            color: #fff;
+        }
+
+        .open-btn:hover {
+            background-color: #3285dd;
+        }
+
+        .download-btn {
+            background-color: #7ed957;
+            color: #111;
+        }
+
+        .download-btn:hover {
+            background-color: #65c23d;
+        }
+
+        .delete-btn {
+            background-color: #ff4d4d;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #d90000;
+        }
+
+        .back-btn {
+            display: block;
+            margin: 30px auto 0 auto;
+            text-align: center;
+            background-color: #0066ff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.2s;
+            width: fit-content;
+        }
+
+        .back-btn:hover {
+            background-color: #004ecc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rozpoznávanie a organizácia dokumentov</h1>
+        <p>Používateľ: {{ meno }}</p>
+
+        {% if files %}
+            <ul class="document-list">
+                {% for file in files %}
+                    <li class="document-item">
+                        📄 <strong>{{ file.filename }} <span style="color:#9cc;">({{ file.category }})</span></strong>
+
+                        <div class="action-buttons">
+                            <a class="open-btn" href="{{ url_for('serve_file', username=meno, category=file.category, filename=file.filename) }}" target="_blank">Otvoriť</a>
+
+                            <a class="download-btn" href="{{ url_for('serve_file', username=meno, category=file.category, filename=file.filename) }}" download>Stiahnuť</a>
+
+                            <form action="{{ url_for('delete_file', category=file.category, filename=file.filename) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="delete-btn" onclick="return confirm('Naozaj chceš odstrániť tento dokument?')">Odstrániť</button>
+                        </form>
+
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>V tejto kategórii sa nenachádzajú žiadne dokumenty.</p>
+        {% endif %}
+
+        <a href="{{ url_for('index') }}" class="back-btn">← Späť na hlavnú stránku</a>
+    </div>
+</body>
+</html>
