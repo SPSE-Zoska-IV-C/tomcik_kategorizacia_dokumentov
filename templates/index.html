@@ -11,6 +11,16 @@
         <h1 class="main-title">Správa dokumentov</h1>
         <p class="subtitle">Nahraj, zobraz a spravuj svoje dokumenty</p>
 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for msg in messages %}
+                        <div class="flash-message">{{ msg }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         <!-- Dashboard karty -->
         <div class="dashboard-cards">
 
@@ -19,25 +29,12 @@
                 <span class="card-value">{{ total }}</span>
             </a>
 
-            <a href="{{ url_for('documents_category', category='pravne') }}" class="dashboard-card">
-                <span class="card-title">PRÁVNE</span>
-                <span class="card-value">{{ counts['pravne'] }}</span>
-            </a>
-
-            <a href="{{ url_for('documents_category', category='financne') }}" class="dashboard-card">
-                <span class="card-title">FINANČNÉ</span>
-                <span class="card-value">{{ counts['financne'] }}</span>
-            </a>
-
-            <a href="{{ url_for('documents_category', category='clanky') }}" class="dashboard-card">
-                <span class="card-title">ČLÁNKY</span>
-                <span class="card-value">{{ counts['clanky'] }}</span>
-            </a>
-
-            <a href="{{ url_for('documents_category', category='spravy') }}" class="dashboard-card">
-                <span class="card-title">SPRÁVY</span>
-                <span class="card-value">{{ counts['spravy'] }}</span>
-            </a>
+            {% for kat in categories %}
+                <a href="{{ url_for('documents_category', category=kat) }}" class="dashboard-card">
+                    <span class="card-title">{{ kat|upper }}</span>
+                    <span class="card-value">{{ counts[kat] }}</span>
+                </a>
+            {% endfor %}
 
         </div>
 
@@ -66,9 +63,42 @@
             </div>
         </div>
 
+        <!-- Správa kategórií -->
+        <div class="upload-section">
+            <div class="upload-card">
+                <h2>Správa kategórií</h2>
+
+                <form action="{{ url_for('add_category') }}" method="post" class="category-form">
+                    <input type="text" name="nova_kategoria" placeholder="Názov novej kategórie" required>
+                    <button type="submit" class="upload-btn">Pridať kategóriu</button>
+                </form>
+
+                <ul class="category-list">
+                    {% for kat in categories %}
+                        <li>
+                            <span>{{ kat }}</span>
+                            <form action="{{ url_for('delete_category', category=kat) }}" method="post" style="display:inline;"
+                                  onsubmit="return confirm('Naozaj chceš odstrániť kategóriu {{ kat }} aj s dokumentmi?');">
+                                <button type="submit" class="delete-btn">Odstrániť</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
         <p class="logout-link">
             <a href="{{ url_for('odhlasenie') }}">Odhlásiť sa</a>
         </p>
+    </div>
+
+    <!-- overlay pri spracovaní nahraných súborov -->
+    <div id="upload-overlay" class="upload-overlay">
+        <div class="upload-overlay-content">
+            <div class="spinner"></div>
+            <h2>Spracúvam dokumenty...</h2>
+            <p>Prosím čakaj, kým sa dokumenty nahrajú a roztriedia.</p>
+        </div>
     </div>
 
 <script>
@@ -76,6 +106,8 @@ let selectedFiles = [];
 const input = document.getElementById("subor");
 const preview = document.getElementById("file-preview");
 const uploadBtn = document.getElementById("upload-btn");
+const uploadForm = document.querySelector(".upload-form");
+const uploadOverlay = document.getElementById("upload-overlay");
 
 input.addEventListener("change", () => {
     selectedFiles = Array.from(input.files);
@@ -84,6 +116,14 @@ input.addEventListener("change", () => {
     preview.innerHTML = list;
     uploadBtn.style.display = "block";
 });
+
+if (uploadForm) {
+    uploadForm.addEventListener("submit", () => {
+        if (uploadOverlay) {
+            uploadOverlay.style.display = "flex";
+        }
+    });
+}
 </script>
 
 </body>
