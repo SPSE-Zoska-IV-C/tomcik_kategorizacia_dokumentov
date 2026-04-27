@@ -1,23 +1,42 @@
-# Ignoruj virtuálne prostredie
-venv/
-ENV/
-env/
-
-# Ignoruj cache súbory
+# Python
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+env/
+venv/
+ENV/
+.venv/
 
-# Ignoruj veľké modely a dočasné súbory
-model/
-*.bin
-*.pt
-*.ckpt
+# Virtual envs and IDE
+venv/
+.vscode/
+.idea/
 
-# Ignoruj logy a výstupy
-logs/
-*.log
-
-# Ignoruj systémové súbory
-.DS_Store
+# OS
 Thumbs.db
+.DS_Store
+
+# Secrets / config
+.env
+*.key
+*.pem
+
+# Uploads / generated data / models
+uploads/
+models/
+*.ckpt
+*.pt
+*.bin
+*.onnx
+
+# Large data and caches
+.cache/
+.huggingface/
+mlruns/
+
+# OneDrive / Office temp
+~$*
+
+# Git LFS hint (if using LFS)
+# *.zip filter=lfs diff=lfs merge=lfs -text

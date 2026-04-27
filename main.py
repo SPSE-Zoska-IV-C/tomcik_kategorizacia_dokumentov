@@ -25,7 +25,7 @@ import fitz
 from ai.predict import predict_category
 
 app = Flask(__name__)
-# v produkcii nastav FLASK_SECRET_KEY v prostredí
+# odrazka
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret-key")
 
 UPLOAD_FOLDER = "uploads"

@@ -1,0 +1,10 @@
+venv/
+.venv/
+env/
+__pycache__/
+.git/
+.vscode/
+uploads/
+*.db
+*.sqlite
+node_modules/

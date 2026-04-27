@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <title>Správa dokumentov</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="main-dashboard-container">
+        <h1 class="main-title">Správa dokumentov</h1>
+        <p class="subtitle">Nahraj, zobraz a spravuj svoje dokumenty</p>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for msg in messages %}
+                        <div class="flash-message">{{ msg }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Dashboard karty -->
+        <div class="dashboard-cards">
+
+            <a href="{{ url_for('documents_total') }}" class="dashboard-card total">
+                <span class="card-title">VŠETKY DOKUMENTY</span>
+                <span class="card-value">{{ total }}</span>
+            </a>
+
+            {% for kat in categories %}
+                <a href="{{ url_for('documents_category', category=kat) }}" class="dashboard-card">
+                    <span class="card-title">{{ kat|upper }}</span>
+                    <span class="card-value">{{ counts[kat] }}</span>
+                </a>
+            {% endfor %}
+
+        </div>
+
+        <!-- Upload sekcia -->
+        <div class="upload-section">
+            <div class="upload-card">
+                <h2>Nahrať dokumenty</h2>
+
+                <form action="/upload" method="post" enctype="multipart/form-data" class="upload-form">
+                    <div class="upload-drop-area">
+                        <div class="upload-folder-icon">📁</div>
+
+                        <div id="file-preview" class="upload-instructions">
+                            Presuň sem súbory alebo klikni na tlačidlo<br>
+                            <small>PDF / DOCX / TXT</small>
+                        </div>
+
+                        <input type="file" id="subor" name="subor" multiple hidden>
+                        <label for="subor" class="choose-files-btn">Vybrať súbory</label>
+                    </div>
+
+                    <button type="submit" id="upload-btn" class="upload-btn" style="display:none;">
+                        Nahrať dokumenty
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Správa kategórií -->
+        <div class="upload-section">
+            <div class="upload-card">
+                <h2>Správa kategórií</h2>
+
+                <form action="{{ url_for('add_category') }}" method="post" class="category-form">
+                    <input type="text" name="nova_kategoria" placeholder="Názov novej kategórie" required>
+                    <button type="submit" class="upload-btn">Pridať kategóriu</button>
+                </form>
+
+                <ul class="category-list">
+                    {% for kat in categories %}
+                        <li>
+                            <span>{{ kat }}</span>
+                            <form action="{{ url_for('delete_category', category=kat) }}" method="post" style="display:inline;"
+                                  onsubmit="return confirm('Naozaj chceš odstrániť kategóriu {{ kat }} aj s dokumentmi?');">
+                                <button type="submit" class="delete-btn">Odstrániť</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <p class="logout-link">
+            <a href="{{ url_for('odhlasenie') }}">Odhlásiť sa</a>
+        </p>
+    </div>
+
+    <!-- overlay pri spracovaní nahraných súborov -->
+    <div id="upload-overlay" class="upload-overlay">
+        <div class="upload-overlay-content">
+            <div class="spinner"></div>
+            <h2>Spracúvam dokumenty...</h2>
+            <p>Prosím čakaj, kým sa dokumenty nahrajú a roztriedia.</p>
+        </div>
+    </div>
+
+<script>
+let selectedFiles = [];
+const input = document.getElementById("subor");
+const preview = document.getElementById("file-preview");
+const uploadBtn = document.getElementById("upload-btn");
+const uploadForm = document.querySelector(".upload-form");
+const uploadOverlay = document.getElementById("upload-overlay");
+
+input.addEventListener("change", () => {
+    selectedFiles = Array.from(input.files);
+    let list = "<strong>Vybrané súbory:</strong><br><br>";
+    selectedFiles.forEach(f => list += "📄 " + f.name + "<br>");
+    preview.innerHTML = list;
+    uploadBtn.style.display = "block";
+});
+
+if (uploadForm) {
+    uploadForm.addEventListener("submit", () => {
+        if (uploadOverlay) {
+            uploadOverlay.style.display = "flex";
+        }
+    });
+}
+</script>
+
+</body>
+</html>

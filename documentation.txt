@@ -1,0 +1,590 @@
+================================================================================
+                    DOCUMENT MANAGEMENT SYSTEM
+                    Technical Documentation
+                    Maturitný Projekt
+                    Pages 1-10 of 20
+================================================================================
+
+TABLE OF CONTENTS
+
+1.  Project Overview and Purpose .................................. 2
+2.  System Architecture Overview ................................... 3
+3.  Backend Architecture and Implementation ...................... 4
+4.  Database Design and Schema Description ....................... 5
+5.  Frontend Architecture and User Interface Overview ............. 6
+6.  Communication Between Frontend and Backend ................... 7
+7.  Security Considerations ...................................... 8
+8.  Deployment and Environment Setup ............................. 9
+9.  Code Structure Overview ...................................... 10
+10. Selected Code Snippets ....................................... 10
+
+================================================================================
+1. PROJECT OVERVIEW AND PURPOSE
+================================================================================
+
+1.1 Introduction
+
+During the development of this maturitný projekt, I have created a web-based 
+document management system that serves as a centralized platform for users to 
+upload, organize, and manage their digital documents. The system simplifies 
+document organization and retrieval processes for individual users who need to 
+maintain structured collections of their important files.
+
+The application integrates multiple technologies to provide a seamless user 
+experience. I focused on creating an intuitive interface that allows users to 
+categorize documents into predefined categories, view collections through an 
+organized dashboard, and perform file management operations. The system maintains 
+strict separation between users, ensuring that each user's document collection 
+remains private and isolated.
+
+1.2 Project Objectives
+
+The primary objective was to develop a functional document management system 
+demonstrating proficiency in web application development, database design, and 
+user interface creation. The system implements secure user authentication and 
+authorization. Users can create accounts with unique usernames and passwords, and 
+securely access their personal document collections through session-based 
+authentication.
+
+The system enables users to upload multiple document files in various formats: 
+PDF files, Microsoft Word documents (DOCX), and plain text files (TXT). The 
+upload functionality allows users to select multiple files at once, improving 
+efficiency when organizing large collections.
+
+Documents are organized into four predefined categories: legal documents (pravne), 
+financial documents (financne), articles (clanky), and news reports (spravy). 
+The system provides intuitive navigation through a dashboard interface that 
+displays document counts for each category. Users can click on category cards to 
+view documents within specific categories, or access a comprehensive view 
+showing all documents.
+
+1.3 Project Scope
+
+The current implementation focuses on core document management functionality. 
+The system supports three document formats and organizes documents into four 
+predefined categories. The system implements a multi-user architecture where each 
+user maintains a completely isolated document repository. User authentication is 
+required to access any part of the system beyond the login and registration pages, 
+ensuring that document collections remain private to their respective owners.
+
+1.4 Target Users
+
+The document management system is designed for individual users who require 
+organized document storage and management capabilities. The interface is optimized 
+for simplicity and ease of use, and does not require specialized technical 
+knowledge to operate, making it accessible to users with varying levels of 
+computer proficiency.
+
+================================================================================
+2. SYSTEM ARCHITECTURE OVERVIEW
+================================================================================
+
+2.1 Architectural Pattern
+
+I chose to implement a three-tier architecture pattern that separates concerns 
+between the presentation layer, the application layer, and the data layer. The 
+presentation layer consists of HTML templates with CSS styling and minimal 
+JavaScript. The application layer is implemented using the Flask web framework, 
+which handles HTTP request processing and business logic. The data layer consists 
+of a SQLite database for user account information and the file system for document 
+storage.
+
+2.2 Technology Stack
+
+The system is built using Python 3.x with Flask 2.x as the web framework. SQLite3 
+provides the database engine for user management. For frontend development, I used 
+HTML5, CSS3, and JavaScript. The Jinja2 templating engine handles server-side 
+template rendering. To support document processing, I integrated the python-docx 
+library for reading Microsoft Word documents and PyMuPDF (fitz module) for PDF 
+text extraction.
+
+2.3 System Components
+
+The system consists of several major components: an authentication module for 
+user account management, a document upload module for processing file uploads, 
+a document organization module for categorization and storage, a document 
+retrieval module for listing and file access, a document management module for 
+deletion functionality, and a user interface module for page rendering.
+
+2.4 Request-Response Flow
+
+When a user interacts with the system, their browser sends an HTTP request to 
+the Flask server. The Flask routing system matches the request URL to the 
+appropriate route handler function. The route handler executes Python code that 
+may interact with the database or file system, then prepares a response. For 
+template-based responses, Flask passes the template to Jinja2, which generates 
+the final HTML output. The browser receives the response and renders the HTML.
+
+================================================================================
+3. BACKEND ARCHITECTURE AND IMPLEMENTATION
+================================================================================
+
+3.1 Flask Application Structure
+
+The backend is implemented as a Flask application in a single main module file. 
+The Flask application initialization begins with importing necessary modules and 
+creating the application instance. A secret key is configured for session 
+management, the upload folder path is defined, and document categories are 
+specified as constants. Database initialization occurs during application startup 
+to ensure that necessary tables exist before processing requests.
+
+3.2 Route Handlers
+
+The application implements HTTP route handlers covering all user interactions. 
+Authentication routes handle user account management: login accepts both GET and 
+POST requests, registration handles account creation with error handling for 
+duplicate usernames, and logout removes the username from the session.
+
+Document management routes handle core functionality: the root route serves as 
+the main dashboard, the upload route processes file uploads, document listing 
+routes provide views of documents within categories or across all categories, 
+the file serving route handles requests to view or download documents, and the 
+delete route processes document deletion requests.
+
+3.3 Session Management
+
+The system uses Flask's built-in session management to maintain user authentication 
+state. When a user successfully logs in, their username is stored in the session 
+object. This username is available in all subsequent requests until the session 
+expires. Each protected route checks for the presence of the username in the 
+session before processing the request, ensuring that only authenticated users can 
+access protected functionality.
+
+3.4 File Upload Processing
+
+When files are submitted, Flask receives them as multipart form data. For each 
+file, the system saves it temporarily, extracts text content, determines the 
+appropriate category, and moves the file to the correct category directory. The 
+text extraction function handles PDF files using PyMuPDF, DOCX files using 
+python-docx, and TXT files through direct file reading.
+
+3.5 Document Organization
+
+Documents are organized into a hierarchical directory structure. The base uploads 
+directory contains subdirectories for each registered user. Within each user's 
+directory, subdirectories exist for each document category. This structure provides 
+user isolation at the file system level and enables efficient organization. 
+Directory creation occurs automatically during user registration and document 
+uploads.
+
+3.6 Error Handling
+
+The application implements error handling at multiple levels. Authentication errors 
+redirect users to the login page with error messages. File operation errors are 
+handled through existence checks and exception handling. Database operations use 
+exception handling to manage integrity errors. The flash message system provides 
+a mechanism for displaying temporary messages to users that persist across redirects.
+
+================================================================================
+4. DATABASE DESIGN AND SCHEMA DESCRIPTION
+================================================================================
+
+4.1 Database Technology
+
+I chose to use SQLite3 as the database management system for storing user account 
+information. SQLite provides a full-featured relational database system without 
+requiring a separate database server process. SQLite stores the entire database 
+in a single file, which simplifies backup procedures and makes the database 
+portable across different systems.
+
+4.2 Database Schema
+
+The database schema consists of a single table designed to store user account 
+information. The pouzivatelia table contains three columns: an id column that 
+serves as the primary key with AUTOINCREMENT, a meno column that stores usernames 
+as TEXT with NOT NULL and UNIQUE constraints, and a heslo column that stores 
+passwords as TEXT with a NOT NULL constraint. The UNIQUE constraint on the meno 
+column guarantees that no two users can have the same username.
+
+4.3 Database Operations
+
+The database module provides functions that encapsulate all database operations. 
+The vytvor_databazu function initializes the database schema using CREATE TABLE 
+IF NOT EXISTS. The pridaj_pouzivatela function handles user insertion with proper 
+error handling for duplicate usernames, using parameterized queries to prevent SQL 
+injection. The over_pouzivatela function performs authentication by checking 
+whether a username and password combination exists in the database.
+
+4.4 Connection Management
+
+Each database operation function follows a consistent pattern: opening a connection 
+to the database file, creating a cursor object, executing SQL statements, 
+committing transactions for write operations, and closing the connection in a 
+finally block to ensure cleanup occurs even if exceptions are raised.
+
+================================================================================
+5. FRONTEND ARCHITECTURE AND USER INTERFACE OVERVIEW
+================================================================================
+
+5.1 Template Engine
+
+The frontend uses Jinja2 templating engine, integrated with Flask, for server-side 
+rendering. Templates are stored in the templates directory and are rendered by 
+Flask when route handlers return template names. The templating engine processes 
+templates by substituting variables with their values, executing control 
+structures, and generating the final HTML output.
+
+5.2 Page Structure
+
+The application consists of four main page templates: login.html for user 
+authentication, register.html for user registration, index.html as the main 
+dashboard with document statistics, and documents.html for document listing and 
+management. Each template is designed to serve a specific purpose while maintaining 
+visual consistency through shared styling.
+
+5.3 Styling Architecture
+
+The frontend styling is implemented through a centralized CSS file that organizes 
+styles into logical sections. The stylesheet uses modern CSS features including 
+Flexbox for layout, CSS gradients for visual effects, and transitions for smooth 
+animations. Global styles establish base typography and color schemes, while 
+component-specific styles define the appearance of dashboard cards, forms, and 
+interactive elements.
+
+5.4 User Interface Components
+
+The dashboard interface displays document counts through cards that serve as 
+information displays and navigation elements. The file upload interface includes 
+a drop area with a custom file input. The document listing interface presents 
+documents in a list format with action buttons for viewing, downloading, and 
+deleting operations.
+
+5.5 Client-Side Interactivity
+
+The frontend includes minimal JavaScript for file upload preview functionality. 
+When users select files, an event listener updates the preview area to display 
+selected filenames and makes the upload button visible, providing immediate 
+feedback about file selection.
+
+================================================================================
+6. COMMUNICATION BETWEEN FRONTEND AND BACKEND
+================================================================================
+
+6.1 HTTP Protocol
+
+The system uses the standard HTTP protocol for all communication between the client 
+browser and the server, following the traditional request-response pattern. HTTP 
+requests include the request method (GET or POST), the request URL, and form data 
+when applicable. Flask's routing system uses the URL to determine which route 
+handler function should process the request.
+
+6.2 Form Data Transmission
+
+Regular form fields are encoded as application/x-www-form-urlencoded, while file 
+uploads require multipart/form-data encoding. Flask automatically parses multipart 
+data, making uploaded files available through the request.files object.
+
+6.3 Session Management
+
+The system uses Flask's session management to maintain user authentication state 
+across multiple requests. Sessions work by storing data on the server and 
+associating it with a session identifier transmitted to the client as a cookie. The 
+session cookie is cryptographically signed using the application's secret key, 
+preventing clients from modifying session data.
+
+6.4 Redirect Pattern
+
+The application uses HTTP redirects to manage navigation flow and prevent 
+duplicate form submissions. The Post-Redirect-Get pattern is implemented for 
+state-changing operations: when a user submits a form, the server processes the 
+request and responds with a redirect.
+
+6.5 Flash Message System
+
+Flash messages are stored in the Flask session and persist across redirects. Route 
+handlers call the flash() function to store messages, and templates retrieve them 
+using get_flashed_messages(), which automatically removes messages after display.
+
+6.6 File Serving
+
+Document files are served through a dedicated route using Flask's send_from_directory 
+function, which provides secure file serving by validating file paths and ensuring 
+files are served from within the specified directory. Files can be served for inline 
+viewing or downloading depending on browser capabilities and file types.
+
+================================================================================
+7. SECURITY CONSIDERATIONS
+================================================================================
+
+7.1 Authentication and Authorization
+
+The system implements basic authentication that validates user credentials against 
+the database before granting access. Upon successful authentication, a session is 
+created with the username stored in the session object. Authorization is enforced 
+through session validation on every protected route, ensuring users can only access 
+their own documents by constructing file paths using the username from the 
+authenticated session.
+
+7.2 Password Storage
+
+The current implementation stores passwords in plain text within the database, 
+which represents a security vulnerability for production deployments. For production, 
+passwords should be hashed using cryptographic hash functions such as bcrypt or 
+Argon2 with salt values.
+
+7.3 Input Validation
+
+The application performs basic input validation through HTML5 required attributes and 
+server-side checks. File operations include existence checks before attempting 
+operations. SQL injection prevention is implemented through parameterized queries 
+in all database operations, ensuring user input cannot be interpreted as SQL code.
+
+7.4 Session Security
+
+Session security is maintained through cryptographic signing of session cookies 
+using the application's secret key. The secret key should be a cryptographically 
+random value stored in an environment variable for production deployments, rather 
+than hardcoded in the source code.
+
+7.5 File Upload Security
+
+File upload functionality should include file size limits, content-type validation, 
+and filename sanitization for production deployments. The current implementation 
+performs basic validation by checking file extensions.
+
+7.6 Path Traversal Prevention
+
+File paths are constructed using os.path.join() with the username from the 
+authenticated session rather than user input. Category names are validated against 
+a predefined list. Flask's send_from_directory function provides additional 
+protection by ensuring files are served from within the specified directory.
+
+================================================================================
+8. DEPLOYMENT AND ENVIRONMENT SETUP
+================================================================================
+
+8.1 System Requirements
+
+The application requires Python 3.x, which provides the runtime environment for 
+executing the application code. The operating system requirements are flexible, as 
+Python and dependencies are available for Windows, Linux, and macOS. Sufficient 
+disk space must be available for storing uploaded documents, and memory requirements 
+are modest for the application itself.
+
+8.2 Python Environment Setup
+
+Python 3.x should be installed from the official Python website. A virtual 
+environment should be created using "python -m venv venv" to isolate the 
+application's dependencies. The virtual environment must be activated before 
+installing dependencies or running the application: on Windows using 
+"venv\Scripts\activate" and on Linux/macOS using "source venv/bin/activate".
+
+8.3 Dependency Installation
+
+With the virtual environment activated, the required packages can be installed: 
+Flask for web framework functionality, python-docx for DOCX file processing, and 
+PyMuPDF for PDF text extraction. Installation can be verified by attempting to 
+import each package in a Python interactive session.
+
+8.4 Application Directory Structure
+
+The application expects a specific directory structure: the main directory contains 
+core Python modules (main.py, database.py) and the database file, the templates 
+directory contains HTML template files, the static directory contains CSS 
+stylesheets and other static assets, and the uploads directory serves as the root 
+for all user document storage with subdirectories for each user and category.
+
+8.5 Running the Application
+
+The application is started by running main.py using the Python interpreter. With the 
+virtual environment activated, the command "python main.py" starts the Flask 
+development server, which listens for HTTP requests on http://127.0.0.1:5000. The 
+Flask development server is suitable for development and testing but is not 
+recommended for production deployments.
+
+8.6 Production Deployment Considerations
+
+For production deployments, a production WSGI server such as Gunicorn or uWSGI 
+should be used instead of the Flask development server. A reverse proxy server 
+such as Nginx should handle static file serving and SSL/TLS termination. HTTPS 
+should be enabled, proper logging should be implemented, backup procedures should 
+be established, and monitoring should be configured.
+
+================================================================================
+9. CODE STRUCTURE OVERVIEW
+================================================================================
+
+9.1 Module Organization
+
+The application is organized into a simple module structure: main.py contains all 
+route handlers and business logic, database.py provides functions for all database 
+interactions, template files are organized in the templates directory, and static 
+assets are stored in the static directory. This organization keeps related code 
+together and maintains clear separation of concerns.
+
+9.2 Main Application Module
+
+The main.py file serves as the entry point and contains all route handlers and core 
+business logic. The file begins with import statements, creates and configures the 
+Flask application instance, defines helper functions for text extraction, and 
+implements route handlers using Flask's route decorators.
+
+9.3 Database Module
+
+The database.py module provides a clean interface for all database operations, 
+encapsulating SQL queries and connection management within dedicated functions. 
+Each function follows a consistent pattern: opening a connection, creating a 
+cursor, executing operations, committing transactions, and closing the 
+connection in a finally block. Functions use parameterized queries to prevent 
+SQL injection.
+
+9.4 Template Organization
+
+Template files are organized to reflect the page structure, with each major page 
+having its own template file. Templates use Jinja2 syntax for dynamic content 
+generation, including variable interpolation, control structures, and template 
+includes. The templates maintain visual consistency through shared CSS styling while 
+serving distinct functional purposes.
+
+9.5 Code Conventions
+
+The codebase follows Python naming conventions and style guidelines, using 
+descriptive names for functions and variables. Comments explain non-obvious logic. 
+Error handling is implemented consistently with try-except blocks and descriptive 
+error messages.
+
+================================================================================
+10. SELECTED CODE SNIPPETS
+================================================================================
+
+10.1 Application Initialization
+
+The following code demonstrates Flask application initialization:
+
+```python
+from flask import Flask, render_template, request, session, redirect, url_for, flash, send_from_directory
+import os
+from database import vytvor_databazu, pridaj_pouzivatela, over_pouzivatela
+from docx import Document
+import fitz
+
+app = Flask(__name__)
+app.secret_key = "tajny_klic"
+
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+KATEGORIE = ["pravne", "financne", "clanky", "spravy"]
+
+vytvor_databazu()
+```
+
+This code imports necessary modules, creates the Flask application instance, 
+configures the secret key and upload folder, defines document categories, and 
+initializes the database.
+
+10.2 Text Extraction Function
+
+The extract_text function handles different file formats:
+
+```python
+def extract_text(path):
+    if path.endswith(".pdf"):
+        text = ""
+        with fitz.open(path) as pdf:
+            for page in pdf:
+                text += page.get_text()
+        return text
+
+    if path.endswith(".docx"):
+        doc = Document(path)
+        return "\n".join(p.text for p in doc.paragraphs)
+
+    if path.endswith(".txt"):
+        return open(path, "r", encoding="utf-8", errors="ignore").read()
+
+    return ""
+```
+
+This function uses conditional logic to determine file type and applies the 
+appropriate extraction method for PDF, DOCX, and TXT files.
+
+10.3 File Upload Handler
+
+The upload route processes file uploads:
+
+```python
+@app.route("/upload", methods=["POST"])
+def upload():
+    if "meno" not in session:
+        return redirect(url_for("prihlasenie"))
+
+    files = request.files.getlist("subor")
+    if not files or files[0].filename == "":
+        flash("Nevybral si žiadne súbory.")
+        return redirect(url_for("index"))
+
+    user = session["meno"]
+    user_folder = os.path.join(UPLOAD_FOLDER, user)
+
+    for f in files:
+        temp_path = os.path.join(user_folder, f.filename)
+        f.save(temp_path)
+        text = extract_text(temp_path)
+        # Category determination and file organization
+        target = os.path.join(user_folder, category)
+        os.makedirs(target, exist_ok=True)
+        os.replace(temp_path, os.path.join(target, f.filename))
+
+    flash("Dokumenty boli nahrané.")
+    return redirect(url_for("index"))
+```
+
+This handler validates authentication, processes each uploaded file, extracts 
+text, determines categories, and organizes files into appropriate directories.
+
+10.4 Database User Creation
+
+The database module demonstrates proper database operations:
+
+```python
+def pridaj_pouzivatela(meno, heslo):
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    try:
+        c.execute('INSERT INTO pouzivatelia (meno, heslo) VALUES (?, ?)', 
+                   (meno, heslo))
+        conn.commit()
+    except sqlite3.IntegrityError:
+        raise ValueError("Používateľ už existuje")
+    finally:
+        conn.close()
+```
+
+This function demonstrates parameterized queries, error handling, and proper 
+connection management with transaction commits.
+
+10.5 Authentication Route
+
+The login handler demonstrates session management:
+
+```python
+@app.route("/login", methods=["GET", "POST"])
+def prihlasenie():
+    if request.method == "POST":
+        meno = request.form["meno"]
+        heslo = request.form["heslo"]
+
+        if over_pouzivatela(meno, heslo):
+            session["meno"] = meno
+            return redirect(url_for("index"))
+
+        flash("Zlé meno alebo heslo.")
+        return redirect(url_for("prihlasenie"))
+
+    return render_template("login.html")
+```
+
+This route handles both GET and POST requests, validates credentials, creates 
+sessions, and provides user feedback.
+
+================================================================================
+END OF DOCUMENTATION - PAGES 1-10
+================================================================================
+
+This documentation covers the first 10 pages of the complete 20-page technical 
+documentation. The remaining pages will cover advanced features, performance 
+optimization, testing methodologies, maintenance procedures, and future development 
+roadmap.
+
+================================================================================
