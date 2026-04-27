@@ -10,9 +10,9 @@ Používané technológie:
 - Úložisko: súborový systém (adresár uploads) + SQLite databáza pre používateľov a kategórie
 
 
-1. Vytvorte a aktivujte virtuálne prostredie:
-python -m venv venv
-venv\Scripts\activate
+1.
+   -Vytvorte a aktivujte virtuálne prostredie: python -m venv venv
+-venv\Scripts\activate
 Nainštalujte závislosti: pip install -r [requirements.txt](http://_vscodecontentref_/0)
 
 
