@@ -14,7 +14,12 @@ Používané technológie:
 python -m venv venv
 venv\Scripts\activate
 Nainštalujte závislosti: pip install -r [requirements.txt](http://_vscodecontentref_/0)
+
+
 Inicializujte databázu (aplikácia to robí automaticky pri prvom spustení) a spustite server:python [main.py](http://_vscodecontentref_/1)
+
+
+
 Otvorte v prehliadači: http://127.0.0.1:5000
 Poznámky:
 
